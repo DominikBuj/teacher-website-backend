@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using TeacherWebsiteBackEnd.Entities;
 
 namespace TeacherWebsiteBackEnd.Data
 {
     public interface IPublicationService
     {
-        IEnumerable<Publication> GetPublications();
-        Publication GetPublicationById(int id);
-        Publication AddPublication(Publication publication);
-        Publication ReplacePublication(Publication publication);
+        Task<IEnumerable<Publication>> GetPublications();
+        Task<Publication> GetPublicationById(int id);
+        Task<Publication> AddPublication(Publication publication);
+        Task<Publication> ReplacePublication(Publication publication);
         void DeletePublications();
-        bool DeletePublicationById(int id);
+        Task<bool> DeletePublicationById(int id);
     }
 }

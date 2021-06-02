@@ -5,10 +5,13 @@ namespace TeacherWebsiteBackEnd.Data
 {
     public class DatabaseContext : DbContext
     {
-        public DbSet<User> Users { get; set; }
-        public DbSet<Text> Texts { get; set; }
-        public DbSet<Update> Updates { get; set; }
-        public DbSet<Publication> Publications { get; set; }
+        public DbSet<User> Users => Set<User>();
+        public DbSet<Text> Texts => Set<Text>();
+        public DbSet<Post> Posts => Set<Post>();
+        public DbSet<Publication> Publications => Set<Publication>();
+        public DbSet<Link> Links => Set<Link>();
+        public DbSet<Dissertation> Dissertations => Set<Dissertation>();
+        public DbSet<File> Files => Set<File>();
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options) { }
     }
 }

@@ -6,14 +6,9 @@ namespace TeacherWebsiteBackEnd.Entities
     {
         [Key]
         [Required]
-        public string Name { get; set; }
-        [Required]
-        public string Value { get; set; }
-
-        public Text(string name, string value)
-        {
-            Name = name;
-            Value = value;
-        }
+        public string? Name { get; set; }
+        [Required(AllowEmptyStrings = true)]
+        [StringLength(2000)]
+        public string? Value { get; set; }
     }
 }

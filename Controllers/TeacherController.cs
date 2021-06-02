@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Reflection;
+using System.Threading.Tasks;
 using TeacherWebsiteBackEnd.Data;
 using TeacherWebsiteBackEnd.Entities;
 using TeacherWebsiteBackEnd.Models;
@@ -21,40 +22,42 @@ namespace TeacherWebsiteBackEnd.Controllers
         }
 
         [HttpGet]
-        public ActionResult<Teacher> GetTeacher()
+        public async Task<ActionResult<Teacher>> GetTeacher()
         {
             Teacher teacher = new Teacher();
 
             foreach (PropertyInfo propertyInfo in typeof(Teacher).GetProperties())
             {
-                Text text = _textService.GetTextByName(propertyInfo.Name);
-                if (text == null) _textService.AddText(new Text(propertyInfo.Name, ""));
+                Text text = await _textService.GetTextByName(propertyInfo.Name);
                 propertyInfo.SetValue(teacher, (text != null) ? text.Value : null);
             }
 
-            return teacher;
+            return Ok(teacher);
         }
 
         [Authorize]
         [HttpPatch]
-        public ActionResult<Teacher> UpdateTeacher([FromBody] JsonPatchDocument<Teacher> update)
+        public async Task<ActionResult<Teacher>> UpdateTeacher([FromBody] JsonPatchDocument<Teacher> update)
         {
-            if (update == null) return BadRequest();
+            Teacher teacher = (await GetTeacher()).Value;
+            Teacher _teacher = (await GetTeacher()).Value;
+            if (teacher == null || _teacher == null)
+            {
+                teacher = new Teacher();
+                _teacher = new Teacher();
+            }
 
-            Teacher _teacher = GetTeacher().Value;
-            Teacher __teacher = GetTeacher().Value;
-            update.ApplyTo(__teacher, ModelState);
-
-            if (!ModelState.IsValid) return BadRequest();
+            update.ApplyTo(_teacher, ModelState);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
             foreach (PropertyInfo propertyInfo in typeof(Teacher).GetProperties())
             {
-                string originalValue = (string)propertyInfo.GetValue(_teacher);
-                string updatedValue = (string)propertyInfo.GetValue(__teacher);
-                if (originalValue != updatedValue) _textService.AddText(new Text(propertyInfo.Name, updatedValue));
+                string originalValue = (string) propertyInfo.GetValue(teacher);
+                string updatedValue = (string) propertyInfo.GetValue(_teacher);
+                if (originalValue != updatedValue) await _textService.ReplaceText(new Text { Name = propertyInfo.Name, Value = updatedValue });
             }
 
-            return Ok(__teacher);
+            return Ok(_teacher);
         }
     }
 }

@@ -1,13 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "rRtTyx0QklOfVV0Nht7Gkj6O26hbGwvZHeUVuI7IMZ4M2iSL/Yq5ztfIOAyuB26dYVEoeoU09aQGm9X0G5aLsw==",
+  "dgSpecHash": "dB6JCgXQ2Rp4k3+wmov8G9CopZYLcsii39xAA5s9kPP9B1byg8bHkliZEwMINjXLlGsG6xkg/gd9rpLN1tRznQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\domin\\source\\repos\\TeacherWebsiteBackEnd\\TeacherWebsiteBackEnd.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\domin\\.nuget\\packages\\automapper\\10.1.0\\automapper.10.1.0.nupkg.sha512",
     "C:\\Users\\domin\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\8.1.0\\automapper.extensions.microsoft.dependencyinjection.8.1.0.nupkg.sha512",
     "C:\\Users\\domin\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
-    "C:\\Users\\domin\\.nuget\\packages\\microsoft.aspnet.webapi.client\\5.2.7\\microsoft.aspnet.webapi.client.5.2.7.nupkg.sha512",
     "C:\\Users\\domin\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\5.0.2\\microsoft.aspnetcore.authentication.jwtbearer.5.0.2.nupkg.sha512",
     "C:\\Users\\domin\\.nuget\\packages\\microsoft.aspnetcore.authentication.openidconnect\\5.0.2\\microsoft.aspnetcore.authentication.openidconnect.5.0.2.nupkg.sha512",
     "C:\\Users\\domin\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\5.0.2\\microsoft.aspnetcore.jsonpatch.5.0.2.nupkg.sha512",

@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Threading.Tasks;
 using TeacherWebsiteBackEnd.Entities;
 
 namespace TeacherWebsiteBackEnd.Data
@@ -13,47 +17,48 @@ namespace TeacherWebsiteBackEnd.Data
             _context = context;
         }
 
-        public IEnumerable<Text> GetTexts()
+        public async Task<IEnumerable<Text>> GetTexts()
         {
-            return _context.Texts.ToList();
+            return await _context.Texts.ToListAsync();
         }
 
-        public Text GetTextByName(string name)
+        public async Task<Text> GetTextByName(string name)
         {
-            return _context.Texts.FirstOrDefault(text => text.Name == name);
+            return await _context.Texts.FirstOrDefaultAsync(text => text.Name == name);
         }
 
-        public Text AddText(Text text)
+        public async Task<Text> AddText(Text text)
         {
-            Text _text = GetTextByName(text.Name);
+            EntityEntry<Text> _text = await _context.Texts.AddAsync(text);
+            await _context.SaveChangesAsync();
 
-            if (_text != null)
-            {
-                _text.Value = text.Value;
-                _context.SaveChanges();
-                return null;
-            }
-
-            _context.Texts.Add(text);
-            _context.SaveChanges();
-
-            return text;
+            return _text.Entity;
         }
 
-        public void DeleteTexts()
+        public async Task<Text> ReplaceText(Text text)
+        {
+            Text _text = await GetTextByName(text.Name);
+            if (_text == null) return await AddText(text);
+
+            _text.Value = text.Value;
+            await _context.SaveChangesAsync();
+
+            return _text;
+        }
+
+        public async void DeleteTexts()
         {
             _context.Texts.RemoveRange(_context.Texts);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public bool DeleteTextByName(string name)
+        public async Task<bool> DeleteTextByName(string name)
         {
-            Text text = _context.Texts.FirstOrDefault(text => text.Name == name);
-
+            Text text = await GetTextByName(name);
             if (text == null) return false;
 
             _context.Texts.Remove(text);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return true;
         }

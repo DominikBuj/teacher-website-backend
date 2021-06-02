@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using TeacherWebsiteBackEnd.Entities;
 using TeacherWebsiteBackEnd.Models;
-using TeacherWebsiteBackEnd.Models.Users;
 
 namespace TeacherWebsiteBackEnd.Helpers
 {
@@ -15,6 +10,10 @@ namespace TeacherWebsiteBackEnd.Helpers
         {
             CreateMap<RegisterForm, User>();
             CreateMap<RegisterForm, LoginForm>();
+            CreateMap<DissertationForm, Dissertation>();
+            CreateMap<Dissertation, DissertationForm>();
+            CreateMap<LinkForm, Link>();
+            CreateMap<Link, LinkForm>();
         }
     }
 }

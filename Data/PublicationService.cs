@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using TeacherWebsiteBackEnd.Entities;
+using TeacherWebsiteBackEnd.Helpers;
 
 namespace TeacherWebsiteBackEnd.Data
 {
@@ -15,54 +18,51 @@ namespace TeacherWebsiteBackEnd.Data
             _context = context;
         }
 
-        public IEnumerable<Publication> GetPublications()
+        public async Task<IEnumerable<Publication>> GetPublications()
         {
-            return _context.Publications.ToList();
+            return await _context.Publications.ToListAsync();
         }
 
-        public Publication GetPublicationById(int id)
+        public async Task<Publication> GetPublicationById(int id)
         {
-            return _context.Publications.FirstOrDefault(publication => publication.Id == id);
+            return await _context.Publications.FirstOrDefaultAsync(publication => publication.Id == id);
         }
 
-        public Publication AddPublication(Publication publication)
+        public async Task<Publication> AddPublication(Publication publication)
         {
-            _context.Publications.Add(publication);
-            _context.SaveChanges();
+            EntityEntry<Publication> _publication = await _context.Publications.AddAsync(publication);
+            await _context.SaveChangesAsync();
 
-            return publication;
+            return _publication.Entity;
         }
 
-        public Publication ReplacePublication(Publication publication)
+        public async Task<Publication> ReplacePublication(Publication publication)
         {
-            Publication _publication = _context.Publications.FirstOrDefault(__publication => __publication.Id == publication.Id);
-
-            if (_publication == null) return null;
+            Publication _publication = await GetPublicationById((int)publication.Id);
+            if (_publication == null) return await AddPublication(publication);
 
             foreach (PropertyInfo propertyInfo in typeof(Publication).GetProperties())
             {
-                var value = propertyInfo.GetValue(publication, null);
-                propertyInfo.SetValue(_publication, Convert.ChangeType(value, propertyInfo.PropertyType));
+                propertyInfo.SetValue(_publication, Functions.ChangeType(propertyInfo.GetValue(publication), propertyInfo.PropertyType), null);
             }
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return _publication;
         }
 
-        public void DeletePublications()
+        public async void DeletePublications()
         {
             _context.Publications.RemoveRange(_context.Publications);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public bool DeletePublicationById(int id)
+        public async Task<bool> DeletePublicationById(int id)
         {
-            Publication publication = _context.Publications.FirstOrDefault(publication => publication.Id == id);
-
+            Publication publication = await _context.Publications.FirstOrDefaultAsync(publication => publication.Id == id);
             if (publication == null) return false;
 
             _context.Publications.Remove(publication);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return true;
         }

@@ -1,14 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using TeacherWebsiteBackEnd.Entities;
 
 namespace TeacherWebsiteBackEnd.Data
 {
     public interface ITextService
     {
-        IEnumerable<Text> GetTexts();
-        Text GetTextByName(string name);
-        Text AddText(Text text);
+        Task<IEnumerable<Text>> GetTexts();
+        Task<Text> GetTextByName(string name);
+        Task<Text> AddText(Text text);
+        Task<Text> ReplaceText(Text text);
         void DeleteTexts();
-        bool DeleteTextByName(string name);
+        Task<bool> DeleteTextByName(string name);
     }
 }

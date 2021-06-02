@@ -1,19 +1,29 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace TeacherWebsiteBackEnd.Entities
 {
+    public enum UserRole
+    {
+        Teacher,
+        Creator,
+        Admin
+    }
+
     public class User
     {
         [Key]
-        public int Id { get; set; }
+        public int? Id { get; set; }
         [Required]
-        public string Username { get; set; }
+        [StringLength(maximumLength: 20, MinimumLength = 3)]
+        public string? Username { get; set; }
         [Required]
         [JsonIgnore]
-        public string PasswordHash { get; set; }
+        public string? PasswordHash { get; set; }
         [Required]
-        public string Role { get; set; }
-        public string Token { get; set; }
+        [Column(TypeName = "varchar(20)")]
+        public UserRole? Role { get; set; }
+        public string? Token { get; set; }
     }
 }

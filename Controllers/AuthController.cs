@@ -6,10 +6,10 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 using TeacherWebsiteBackEnd.Data;
 using TeacherWebsiteBackEnd.Entities;
 using TeacherWebsiteBackEnd.Models;
-using TeacherWebsiteBackEnd.Models.Users;
 
 namespace TeacherWebsiteBackEnd.Controllers
 {
@@ -29,9 +29,9 @@ namespace TeacherWebsiteBackEnd.Controllers
         }
 
         [HttpPost("login")]
-        public ActionResult<User> Login([FromBody] LoginForm loginForm)
+        public async Task<ActionResult<User>> Login([FromBody] LoginForm loginForm)
         {
-            User user = _userService.Login(loginForm);
+            User user = await _userService.Login(loginForm);
             if (user == null) return BadRequest();
 
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
@@ -53,13 +53,14 @@ namespace TeacherWebsiteBackEnd.Controllers
         }
 
         [HttpPost("register")]
-        public ActionResult<User> Register([FromBody] RegisterForm registerForm)
+        public async Task<ActionResult<User>> Register([FromBody] RegisterForm registerForm)
         {
-            if (_userService.Register(registerForm) == null) return BadRequest();
+            User registeredUser = await _userService.Register(registerForm);
+            if (registeredUser == null) return BadRequest();
 
             LoginForm loginForm = _mapper.Map<LoginForm>(registerForm);
 
-            return Login(loginForm);
+            return await Login(loginForm);
         }
     }
 }

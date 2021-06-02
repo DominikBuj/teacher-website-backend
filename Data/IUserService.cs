@@ -1,16 +1,18 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using TeacherWebsiteBackEnd.Entities;
-using TeacherWebsiteBackEnd.Models.Users;
+using TeacherWebsiteBackEnd.Models;
 
 namespace TeacherWebsiteBackEnd.Data
 {
     public interface IUserService
     {
-        IEnumerable<User> GetUsers();
-        User GetUserById(int id);
-        User Login(LoginForm loginForm);
-        User Register(RegisterForm registerForm);
+        Task<bool> UserExistsByUsername(string username);
+        Task<IEnumerable<User>> GetUsers();
+        Task<User> GetUserById(int id);
+        Task<User> Login(LoginForm loginForm);
+        Task<User> Register(RegisterForm registerForm);
         void DeleteUsers();
-        bool DeleteUserById(int id);
+        Task<bool> DeleteUserById(int id);
     }
 }

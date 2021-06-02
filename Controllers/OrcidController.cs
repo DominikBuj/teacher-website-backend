@@ -22,32 +22,35 @@ namespace TeacherWebsiteBackEnd.Controllers
             _httpClientFactory = httpClientFactory;
         }
 
-        private async Task<ActionResult<string>> GetInformation(string accessToken, string orcidId, string endpoint)
+        private async Task<ActionResult> GetInformation(string accessToken, string orcidId, string endpoint)
         {
             UriBuilder uriBuilder = new UriBuilder($"https://pub.orcid.org/v3.0/{orcidId}/{endpoint}");
             HttpClient httpClient = _httpClientFactory.CreateClient();
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/orcid+json"));
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
             HttpResponseMessage httpResponseMessage = await httpClient.GetAsync(uriBuilder.Uri);
             string responseString = await httpResponseMessage.Content.ReadAsStringAsync();
+
             if (!httpResponseMessage.IsSuccessStatusCode) return BadRequest();
+
             return Ok(responseString);
         }
 
         [HttpGet("record/{accessToken}/{orcidId}")]
-        public Task<ActionResult<string>> GetRecord(string accessToken, string orcidId)
+        public async Task<ActionResult> GetRecord(string accessToken, string orcidId)
         {
-            return GetInformation(accessToken, orcidId, "record");
+            return await GetInformation(accessToken, orcidId, "record");
         }
 
         [HttpGet("works/{accessToken}/{orcidId}")]
-        public Task<ActionResult<string>> GetWorks(string accessToken, string orcidId)
+        public async Task<ActionResult> GetWorks(string accessToken, string orcidId)
         {
-            return GetInformation(accessToken, orcidId, "works");
+            return await GetInformation(accessToken, orcidId, "works");
         }
 
         [HttpPost]
-        public async Task<ActionResult<OrcidAccessTokenResponse>> GetAccessToken([FromBody] AccessTokenRequest accessTokenRequest)
+        public async Task<ActionResult> GetAccessToken([FromBody] AccessTokenRequest accessTokenRequest)
         {
             UriBuilder uriBuilder = new UriBuilder("https://orcid.org/oauth/token");
             uriBuilder.Query =
@@ -58,9 +61,12 @@ namespace TeacherWebsiteBackEnd.Controllers
                 $"redirect_uri={accessTokenRequest.redirect_uri}";
             HttpContent httpContent = new StringContent(JsonSerializer.Serialize(accessTokenRequest), Encoding.UTF8, "application/x-www-form-urlencoded");
             HttpClient httpClient = _httpClientFactory.CreateClient();
+
             HttpResponseMessage httpResponseMessage = await httpClient.PostAsync(uriBuilder.Uri, httpContent);
             string responseString = await httpResponseMessage.Content.ReadAsStringAsync();
+
             if (!httpResponseMessage.IsSuccessStatusCode) return BadRequest();
+
             OrcidAccessTokenResponse accessTokenResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<OrcidAccessTokenResponse>(responseString);
             return Ok(accessTokenResponse);
         }

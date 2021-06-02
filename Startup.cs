@@ -9,14 +9,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using TeacherWebsiteBackEnd.Data;
 using TeacherWebsiteBackEnd.Entities;
 using TeacherWebsiteBackEnd.Models;
-using TeacherWebsiteBackEnd.Models.Users;
 
 namespace TeacherWebsiteBackEnd
 {
@@ -42,7 +43,10 @@ namespace TeacherWebsiteBackEnd
 
             services.AddHttpClient();
 
-            services.AddControllers().AddNewtonsoftJson();
+            services.AddControllers().AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            });
 
             services.Configure<FormOptions>(options =>
             {
@@ -68,7 +72,7 @@ namespace TeacherWebsiteBackEnd
                     {
                         IUserService userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
                         int userId = int.Parse(context.Principal.Identity.Name);
-                        User user = userService.GetUserById(userId);
+                        User user = userService.GetUserById(userId).Result;
                         if (user == null) context.Fail("Unauthorized");
                         return Task.CompletedTask;
                     }
@@ -88,44 +92,32 @@ namespace TeacherWebsiteBackEnd
             // REGISTERS DEPENDENCY INJECTION SERVICES
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITextService, TextService>();
-            services.AddScoped<IUpdateService, UpdateService>();
+            services.AddScoped<IPostService, PostService>();
             services.AddScoped<IPublicationService, PublicationService>();
+            services.AddScoped<ILinkService, LinkService>();
+            services.AddScoped<IDissertationService, DissertationService>();
         }
 
-        private void SetUpUsers(IUserService userService)
+        private void SetUpAdmin(IUserService userService, IOptions<AppSettings> settings)
         {
-            userService.DeleteUsers();
-            RegisterForm registerForm;
+            bool adminExists = userService.UserExistsByUsername(settings.Value.AdminUsername).Result;
+            if (adminExists) return;
 
-            registerForm = new RegisterForm
+            RegisterForm adminRegisterForm = new RegisterForm
             {
-                Username = "admin",
-                Password = "admin",
-                Role = RoleName.Admin
+                Username = settings.Value.AdminUsername,
+                Password = settings.Value.AdminPassword,
+                Role = Enum.GetName(typeof(UserRole), UserRole.Admin)
             };
-            userService.Register(registerForm);
 
-            registerForm = new RegisterForm
-            {
-                Username = "teacher",
-                Password = "teacher",
-                Role = RoleName.Teacher
-            };
-            userService.Register(registerForm);
-
-            registerForm = new RegisterForm
-            {
-                Username = "creator",
-                Password = "creator",
-                Role = RoleName.Creator
-            };
-            userService.Register(registerForm);
+            User registeredAdmin = userService.Register(adminRegisterForm).Result;
+            if (registeredAdmin == null) Console.WriteLine("Failed to register the admin");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IUserService userService)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IUserService userService, IMapper mapper, IOptions<AppSettings> settings)
         {
-            SetUpUsers(userService);
+            SetUpAdmin(userService, settings);
 
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 

@@ -1,22 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+using TeacherWebsiteBackEnd.Helpers;
 
 namespace TeacherWebsiteBackEnd.Entities
 {
     public class Publication
     {
         [Key]
-        public int Id { get; set; }
+        public int? Id { get; set; }
         [Required]
-        public string Title { get; set; }
-        public string Subtitle { get; set; }
-        public string Publisher { get; set; }
+        [StringLength(200)]
+        public string? Title { get; set; }
+        [StringLength(200)]
+        public string? Subtitle { get; set; }
+        [StringLength(10)]
+        public string? Publisher { get; set; }
         [Required]
-        public string Type { get; set; }
-        public string Link { get; set; }
-        public Int64 Date { get; set; }
+        [StringLength(10)]
+        public string? Type { get; set; }
+        [StringLength(2000)]
+        public string? Url { get; set; }
+        [PossibleDate]
+        public Int64? Date { get; set; }
     }
 }

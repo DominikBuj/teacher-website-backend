@@ -8,7 +8,7 @@ namespace TeacherWebsiteBackEnd.Entities
         [Required]
         public string? Name { get; set; }
         [Required(AllowEmptyStrings = true)]
-        [StringLength(2000)]
+        [StringLength(2048)]
         public string? Value { get; set; }
     }
 }

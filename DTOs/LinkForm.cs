@@ -1,21 +1,23 @@
-﻿#nullable enable
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace TeacherWebsiteBackEnd.Models
+namespace TeacherWebsiteBackEnd.DTOs
 {
     public class LinkForm
     {
         [Key]
         public int? Id { get; set; }
         [Required]
-        [StringLength(20)]
+        [StringLength(32)]
         public string? Type { get; set; }
-        public string? Name { get; set; }
         [Required]
+        [StringLength(128)]
+        public string? TypeName { get; set; }
+        [Required]
+        [StringLength(2048)]
         public string? Url { get; set; }
+        [StringLength(2048)]
         public string? IconUrl { get; set; }
-        [StringLength(30)]
+        [StringLength(32)]
         public string? Color { get; set; }
     }
 }
-#nullable disable

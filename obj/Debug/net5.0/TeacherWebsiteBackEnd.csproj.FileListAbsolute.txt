@@ -33,7 +33,6 @@ C:\Users\domin\source\repos\TeacherWebsiteBackEnd\bin\Debug\net5.0\Swashbuckle.A
 C:\Users\domin\source\repos\TeacherWebsiteBackEnd\bin\Debug\net5.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 C:\Users\domin\source\repos\TeacherWebsiteBackEnd\bin\Debug\net5.0\System.Diagnostics.DiagnosticSource.dll
 C:\Users\domin\source\repos\TeacherWebsiteBackEnd\bin\Debug\net5.0\System.IdentityModel.Tokens.Jwt.dll
-C:\Users\domin\source\repos\TeacherWebsiteBackEnd\obj\Debug\net5.0\TeacherWebsiteBackEnd.csprojAssemblyReference.cache
 C:\Users\domin\source\repos\TeacherWebsiteBackEnd\obj\Debug\net5.0\TeacherWebsiteBackEnd.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\domin\source\repos\TeacherWebsiteBackEnd\obj\Debug\net5.0\TeacherWebsiteBackEnd.AssemblyInfoInputs.cache
 C:\Users\domin\source\repos\TeacherWebsiteBackEnd\obj\Debug\net5.0\TeacherWebsiteBackEnd.AssemblyInfo.cs
@@ -50,3 +49,4 @@ C:\Users\domin\source\repos\TeacherWebsiteBackEnd\obj\Debug\net5.0\ref\TeacherWe
 C:\Users\domin\source\repos\TeacherWebsiteBackEnd\obj\Debug\net5.0\TeacherWebsiteBackEnd.pdb
 C:\Users\domin\source\repos\TeacherWebsiteBackEnd\obj\Debug\net5.0\TeacherWebsiteBackEnd.genruntimeconfig.cache
 C:\Users\domin\source\repos\TeacherWebsiteBackEnd\bin\Debug\net5.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+C:\Users\domin\source\repos\TeacherWebsiteBackEnd\obj\Debug\net5.0\TeacherWebsiteBackEnd.csproj.AssemblyReference.cache

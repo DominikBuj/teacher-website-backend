@@ -3,7 +3,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace TeacherWebsiteBackEnd.Migrations
 {
-    public partial class InitMigration : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,9 +13,9 @@ namespace TeacherWebsiteBackEnd.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Topic = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    Description = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: true),
-                    Status = table.Column<string>(type: "varchar(20)", nullable: false),
+                    Topic = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    Description = table.Column<string>(type: "character varying(2048)", maxLength: 2048, nullable: true),
+                    Status = table.Column<string>(type: "varchar(32)", nullable: false),
                     Date = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
@@ -29,11 +29,11 @@ namespace TeacherWebsiteBackEnd.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Type = table.Column<string>(type: "varchar(20)", nullable: false),
-                    Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    Url = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
-                    IconUrl = table.Column<string>(type: "text", nullable: true),
-                    Color = table.Column<string>(type: "varchar(30)", nullable: true)
+                    Type = table.Column<string>(type: "varchar(32)", nullable: false),
+                    TypeName = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    Url = table.Column<string>(type: "character varying(2048)", maxLength: 2048, nullable: false),
+                    IconUrl = table.Column<string>(type: "character varying(2048)", maxLength: 2048, nullable: true),
+                    Color = table.Column<string>(type: "varchar(32)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -46,9 +46,9 @@ namespace TeacherWebsiteBackEnd.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Title = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    Subtitle = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
-                    Content = table.Column<string>(type: "character varying(4000)", maxLength: 4000, nullable: false),
+                    Title = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    Subtitle = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    Content = table.Column<string>(type: "character varying(4096)", maxLength: 4096, nullable: false),
                     Date = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
@@ -62,11 +62,12 @@ namespace TeacherWebsiteBackEnd.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Title = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    Subtitle = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
-                    Publisher = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: true),
-                    Type = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
-                    Url = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: true),
+                    Title = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    Subtitle = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    Publisher = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true),
+                    Type = table.Column<string>(type: "varchar(32)", nullable: false),
+                    TypeName = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    Url = table.Column<string>(type: "character varying(2048)", maxLength: 2048, nullable: true),
                     Date = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
@@ -79,7 +80,7 @@ namespace TeacherWebsiteBackEnd.Migrations
                 columns: table => new
                 {
                     Name = table.Column<string>(type: "text", nullable: false),
-                    Value = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false)
+                    Value = table.Column<string>(type: "character varying(2048)", maxLength: 2048, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -92,9 +93,9 @@ namespace TeacherWebsiteBackEnd.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Username = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    Username = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
                     PasswordHash = table.Column<string>(type: "text", nullable: false),
-                    Role = table.Column<string>(type: "varchar(20)", nullable: false),
+                    Role = table.Column<string>(type: "varchar(32)", nullable: false),
                     Token = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
@@ -108,8 +109,8 @@ namespace TeacherWebsiteBackEnd.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Url = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
+                    Name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    Url = table.Column<string>(type: "character varying(2048)", maxLength: 2048, nullable: false),
                     PostId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>

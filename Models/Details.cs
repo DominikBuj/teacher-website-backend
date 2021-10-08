@@ -5,9 +5,9 @@ namespace TeacherWebsiteBackEnd.Models
 {
     public class Details
     {
-        [StringLength(100)]
+        [StringLength(2048)]
         public string? lightBackgroundUrl { get; set; }
-        [StringLength(100)]
+        [StringLength(2048)]
         public string? darkBackgroundUrl { get; set; }
     }
 }

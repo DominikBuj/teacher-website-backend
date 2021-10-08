@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TeacherWebsiteBackEnd.Data;
-using TeacherWebsiteBackEnd.Entities;
+using TeacherWebsiteBackEnd.Models;
+using TeacherWebsiteBackEnd.DTOs;
 
 namespace TeacherWebsiteBackEnd.Controllers
 {
@@ -19,35 +20,35 @@ namespace TeacherWebsiteBackEnd.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Publication>>> GetPublications()
+        public async Task<ActionResult<IEnumerable<PublicationForm>>> GetPublications()
         {
-            IEnumerable<Publication> publications = await _publicationService.GetPublications();
+            IEnumerable<PublicationForm> publications = await _publicationService.GetPublications();
             if (publications == null) return NotFound();
             return Ok(publications);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Publication>> GetPublicationById(int id)
+        public async Task<ActionResult<PublicationForm>> GetPublicationById(int id)
         {
-            Publication publication = await _publicationService.GetPublicationById(id);
+            PublicationForm publication = await _publicationService.GetPublicationById(id);
             if (publication == null) return NotFound();
             return Ok(publication);
         }
 
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<Publication>> AddPublication([FromBody] Publication publication)
+        public async Task<ActionResult<PublicationForm>> AddPublication([FromBody] PublicationForm publication)
         {
-            Publication _publication = await _publicationService.AddPublication(publication);
+            PublicationForm _publication = await _publicationService.AddPublication(publication);
             if (_publication == null) return BadRequest();
             return Created($"api/publications/{_publication.Id}", _publication);
         }
 
         [Authorize]
         [HttpPut("{id}")]
-        public async Task<ActionResult<Publication>> ReplacePublication([FromBody] Publication publication)
+        public async Task<ActionResult<PublicationForm>> ReplacePublication([FromBody] PublicationForm publication)
         {
-            Publication _publication = await _publicationService.ReplacePublication(publication);
+            PublicationForm _publication = await _publicationService.ReplacePublication(publication);
             if (_publication == null) return NotFound();
             return Ok(_publication);
         }

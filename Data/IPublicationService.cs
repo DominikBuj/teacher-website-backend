@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using TeacherWebsiteBackEnd.Entities;
+using TeacherWebsiteBackEnd.Models;
+using TeacherWebsiteBackEnd.DTOs;
 
 namespace TeacherWebsiteBackEnd.Data
 {
     public interface IPublicationService
     {
-        Task<IEnumerable<Publication>> GetPublications();
-        Task<Publication> GetPublicationById(int id);
-        Task<Publication> AddPublication(Publication publication);
-        Task<Publication> ReplacePublication(Publication publication);
+        Task<IEnumerable<PublicationForm>> GetPublications();
+        Task<PublicationForm> GetPublicationById(int id);
+        Task<PublicationForm> AddPublication(PublicationForm publication);
+        Task<PublicationForm> ReplacePublication(PublicationForm publication);
         void DeletePublications();
         Task<bool> DeletePublicationById(int id);
     }

@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using TeacherWebsiteBackEnd.Entities;
 using TeacherWebsiteBackEnd.Models;
+using TeacherWebsiteBackEnd.DTOs;
 
 namespace TeacherWebsiteBackEnd.Data
 {

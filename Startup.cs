@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using TeacherWebsiteBackEnd.Data;
 using TeacherWebsiteBackEnd.Entities;
 using TeacherWebsiteBackEnd.Models;
+using TeacherWebsiteBackEnd.DTOs;
 
 namespace TeacherWebsiteBackEnd
 {
@@ -33,21 +34,24 @@ namespace TeacherWebsiteBackEnd
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Creates a database context with a postreSQL database.
             services.AddDbContext<DatabaseContext>(options => options.UseNpgsql(_configuration.GetConnectionString("DatabaseConnection")));
 
-            // CREATES A CUSTOM CORS POLICY
+            // Creates a custom CORS policy.
             services.AddCors(options => options.AddPolicy("CorsPolicy", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 
-            // REGISTERS AUTO MAPPER
+            // Registers the AutoMapper that maps between C# objects.
             services.AddAutoMapper(typeof(Startup));
 
             services.AddHttpClient();
 
+            // Registers NewtonsoftJson converter that transforms between JSON and C# objects.
             services.AddControllers().AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
 
+            // Increases the limit of a request's body for receiving and sending files.
             services.Configure<FormOptions>(options =>
             {
                 options.ValueLengthLimit = int.MaxValue;
@@ -55,9 +59,11 @@ namespace TeacherWebsiteBackEnd
                 options.MemoryBufferThreshold = int.MaxValue;
             });
 
+            // Registers the file with app settings.
             IConfigurationSection appSettingsSection = _configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
 
+            // Sets up the JWT authentication for the application.
             AppSettings appSettings = appSettingsSection.Get<AppSettings>();
             byte[] key = Encoding.ASCII.GetBytes(appSettings.Secret);
             services.AddAuthentication(options =>
@@ -71,9 +77,13 @@ namespace TeacherWebsiteBackEnd
                     OnTokenValidated = context =>
                     {
                         IUserService userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
-                        int userId = int.Parse(context.Principal.Identity.Name);
-                        User user = userService.GetUserById(userId).Result;
-                        if (user == null) context.Fail("Unauthorized");
+                        string? userIdString = context.Principal?.Identity?.Name;
+                        if (Int32.TryParse(userIdString, out int userId))
+                        {
+                            User user = userService.GetUserById(userId).Result;
+                            if (user == null) context.Fail("Unauthorized");
+                        }
+                        else context.Fail("Incorrect user Id");
                         return Task.CompletedTask;
                     }
                 };
@@ -89,7 +99,7 @@ namespace TeacherWebsiteBackEnd
                 };
             });
 
-            // REGISTERS DEPENDENCY INJECTION SERVICES
+            // Registers dependency injection services.
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITextService, TextService>();
             services.AddScoped<IPostService, PostService>();
@@ -98,6 +108,7 @@ namespace TeacherWebsiteBackEnd
             services.AddScoped<IDissertationService, DissertationService>();
         }
 
+        // Sets up the dummy account of an admin of the site.
         private void SetUpAdmin(IUserService userService, IOptions<AppSettings> settings)
         {
             bool adminExists = userService.UserExistsByUsername(settings.Value.AdminUsername).Result;
@@ -125,6 +136,7 @@ namespace TeacherWebsiteBackEnd
 
             app.UseCors("CorsPolicy");
 
+            // Registers a folder of the application as a place for storing files.
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources")),

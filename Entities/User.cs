@@ -16,13 +16,13 @@ namespace TeacherWebsiteBackEnd.Entities
         [Key]
         public int? Id { get; set; }
         [Required]
-        [StringLength(maximumLength: 20, MinimumLength = 3)]
+        [StringLength(maximumLength: 32, MinimumLength = 3)]
         public string? Username { get; set; }
         [Required]
         [JsonIgnore]
         public string? PasswordHash { get; set; }
         [Required]
-        [Column(TypeName = "varchar(20)")]
+        [Column(TypeName = "varchar(32)")]
         public UserRole? Role { get; set; }
         public string? Token { get; set; }
     }

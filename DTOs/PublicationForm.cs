@@ -1,19 +1,10 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using TeacherWebsiteBackEnd.Helpers;
 
-namespace TeacherWebsiteBackEnd.Entities
+namespace TeacherWebsiteBackEnd.DTOs
 {
-    public enum PublicationType
-    {
-        Book,
-        Article,
-        Dissertation,
-        Other
-    }
-
-    public class Publication
+    public class PublicationForm
     {
         [Key]
         public int? Id { get; set; }
@@ -25,8 +16,8 @@ namespace TeacherWebsiteBackEnd.Entities
         [StringLength(128)]
         public string? Publisher { get; set; }
         [Required]
-        [Column(TypeName = "varchar(32)")]
-        public PublicationType? Type { get; set; }
+        [StringLength(32)]
+        public string? Type { get; set; }
         [Required]
         [StringLength(128)]
         public string? TypeName { get; set; }

@@ -24,16 +24,18 @@ namespace TeacherWebsiteBackEnd.Entities
         [Key]
         public int? Id { get; set; }
         [Required]
-        [Column(TypeName = "varchar(20)")]
+        [Column(TypeName = "varchar(32)")]
         public LinkType? Type { get; set; }
         [Required]
-        [StringLength(200)]
-        public string? Name { get; set; }
+        [StringLength(128)]
+        public string? TypeName { get; set; }
         [Required]
-        [StringLength(2000)]
+        [StringLength(2048)]
         public string? Url { get; set; }
+        [StringLength(2048)]
         public string? IconUrl { get; set; }
-        [Column(TypeName = "varchar(30)")]
+        [Column(TypeName = "varchar(32)")]
         public LinkColor? Color { get; set; }
     }
+
 }

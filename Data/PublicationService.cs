@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
@@ -6,48 +7,68 @@ using System.Reflection;
 using System.Threading.Tasks;
 using TeacherWebsiteBackEnd.Entities;
 using TeacherWebsiteBackEnd.Helpers;
+using TeacherWebsiteBackEnd.Models;
+using TeacherWebsiteBackEnd.DTOs;
 
 namespace TeacherWebsiteBackEnd.Data
 {
     public class PublicationService : IPublicationService
     {
         private readonly DatabaseContext _context;
+        private readonly IMapper _mapper;
 
-        public PublicationService(DatabaseContext context)
+        public PublicationService(DatabaseContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        public async Task<IEnumerable<Publication>> GetPublications()
+        private Publication CreatePublication(PublicationForm publication)
         {
-            return await _context.Publications.ToListAsync();
+            if (!Enum.TryParse(publication.Type, out PublicationType publicationType)) return null;
+
+            Publication _publication = _mapper.Map<Publication>(publication);
+
+            return _publication;
         }
 
-        public async Task<Publication> GetPublicationById(int id)
+        public async Task<IEnumerable<PublicationForm>> GetPublications()
         {
-            return await _context.Publications.FirstOrDefaultAsync(publication => publication.Id == id);
+            IEnumerable<Publication> publications = await _context.Publications.ToListAsync();
+            return _mapper.Map<IEnumerable<Publication>, IEnumerable<PublicationForm>>(publications);
         }
 
-        public async Task<Publication> AddPublication(Publication publication)
+        public async Task<PublicationForm> GetPublicationById(int id)
         {
-            EntityEntry<Publication> _publication = await _context.Publications.AddAsync(publication);
+            Publication publication = await _context.Publications.FirstOrDefaultAsync(publication => publication.Id == id);
+            return _mapper.Map<PublicationForm>(publication);
+        }
+
+        public async Task<PublicationForm> AddPublication(PublicationForm publication)
+        {
+            Publication _publication = CreatePublication(publication);
+            if (_publication == null) return null;
+
+            EntityEntry<Publication> __publication = await _context.Publications.AddAsync(_publication);
             await _context.SaveChangesAsync();
 
-            return _publication.Entity;
+            return _mapper.Map<PublicationForm>(__publication.Entity);
         }
 
-        public async Task<Publication> ReplacePublication(Publication publication)
+        public async Task<PublicationForm> ReplacePublication(PublicationForm publication)
         {
-            Publication _publication = await GetPublicationById((int)publication.Id);
+            Publication _publication = await _context.Publications.FirstOrDefaultAsync(__publication => __publication.Id == publication.Id);
             if (_publication == null) return await AddPublication(publication);
 
+            Publication __publication = CreatePublication(publication);
+            if (__publication == null) return null;
             foreach (PropertyInfo propertyInfo in typeof(Publication).GetProperties())
             {
-                propertyInfo.SetValue(_publication, Functions.ChangeType(propertyInfo.GetValue(publication), propertyInfo.PropertyType), null);
+                propertyInfo.SetValue(_publication, Functions.ChangeType(propertyInfo.GetValue(__publication), propertyInfo.PropertyType), null);
             }
             await _context.SaveChangesAsync();
 
-            return _publication;
+            return _mapper.Map<PublicationForm>(_publication);
         }
 
         public async void DeletePublications()

@@ -17,12 +17,12 @@ namespace TeacherWebsiteBackEnd.Entities
         [Key]
         public int? Id { get; set; }
         [Required]
-        [StringLength(200)]
+        [StringLength(256)]
         public string? Topic { get; set; }
-        [StringLength(2000)]
+        [StringLength(2048)]
         public string? Description { get; set; }
         [Required]
-        [Column(TypeName = "varchar(20)")]
+        [Column(TypeName = "varchar(32)")]
         public DissertationStatus? Status { get; set; }
         [PossibleDate]
         public Int64? Date { get; set; }

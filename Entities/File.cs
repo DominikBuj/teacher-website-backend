@@ -8,10 +8,10 @@ namespace TeacherWebsiteBackEnd.Entities
         [Key]
         public int? Id { get; set; }
         [Required]
-        [StringLength(100)]
+        [StringLength(128)]
         public string? Name { get; set; }
         [Required]
-        [StringLength(2000)]
+        [StringLength(2048)]
         public string? Url { get; set; }
         public int? PostId { get; set; }
         public Post? Post { get; set; }

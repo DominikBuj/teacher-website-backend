@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using TeacherWebsiteBackEnd.Entities;
 using TeacherWebsiteBackEnd.Models;
 using TeacherWebsiteBackEnd.Helpers;
+using TeacherWebsiteBackEnd.DTOs;
 
 namespace TeacherWebsiteBackEnd.Data
 {

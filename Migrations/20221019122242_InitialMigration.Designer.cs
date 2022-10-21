@@ -10,7 +10,7 @@ using TeacherWebsiteBackEnd.Data;
 namespace TeacherWebsiteBackEnd.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20210821124640_InitialMigration")]
+    [Migration("20221019122242_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -19,7 +19,7 @@ namespace TeacherWebsiteBackEnd.Migrations
             modelBuilder
                 .UseIdentityByDefaultColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.2");
+                .HasAnnotation("ProductVersion", "5.0.17");
 
             modelBuilder.Entity("TeacherWebsiteBackEnd.Entities.Dissertation", b =>
                 {

@@ -17,7 +17,7 @@ namespace TeacherWebsiteBackEnd.Migrations
             modelBuilder
                 .UseIdentityByDefaultColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.2");
+                .HasAnnotation("ProductVersion", "5.0.17");
 
             modelBuilder.Entity("TeacherWebsiteBackEnd.Entities.Dissertation", b =>
                 {
